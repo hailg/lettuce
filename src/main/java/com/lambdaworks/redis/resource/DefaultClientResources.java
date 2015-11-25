@@ -355,7 +355,7 @@ public class DefaultClientResources implements ClientResources {
 
     @Override
     public int computationThreadPoolSize() {
-        return Lists.newArrayList(eventExecutorGroup.iterator()).size();
+        return Lists.newArrayList(eventExecutorGroup.children()).size();
     }
 
     @Override

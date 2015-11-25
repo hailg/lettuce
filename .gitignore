@@ -18,3 +18,5 @@ dependency-reduced-pom.xml
 Vagrantfile
 
 CluTest.java
+/build/
+/bin/
