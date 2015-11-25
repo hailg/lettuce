@@ -4,6 +4,8 @@ import static com.lambdaworks.redis.resource.Futures.toBooleanPromise;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Maps;
@@ -77,11 +79,13 @@ public class DefaultEventLoopGroupProvider implements EventLoopGroupProvider {
      */
     public static <T extends EventExecutorGroup> EventExecutorGroup createEventLoopGroup(Class<T> type, int numberOfThreads) {
         if (DefaultEventExecutorGroup.class.equals(type)) {
-            return new DefaultEventExecutorGroup(numberOfThreads, new DefaultThreadFactory("lettuce-eventExecutorLoop", true));
+            Executor executor = Executors.newCachedThreadPool(new DefaultThreadFactory("lettuce-eventExecutorLoop", true));
+        	return new DefaultEventExecutorGroup(numberOfThreads, executor);
         }
 
         if (NioEventLoopGroup.class.equals(type)) {
-            return new NioEventLoopGroup(numberOfThreads, new DefaultThreadFactory("lettuce-nioEventLoop", true));
+        	Executor executor = Executors.newCachedThreadPool(new DefaultThreadFactory("lettuce-nioEventLoop", true));
+            return new NioEventLoopGroup(numberOfThreads, executor);
         }
 
         if (EpollProvider.epollEventLoopGroupClass != null && EpollProvider.epollEventLoopGroupClass.equals(type)) {

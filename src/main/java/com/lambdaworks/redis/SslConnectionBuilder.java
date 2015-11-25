@@ -27,7 +27,6 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.ssl.SslHandshakeCompletionEvent;
 import io.netty.handler.ssl.SslProvider;
@@ -91,15 +90,13 @@ public class SslConnectionBuilder extends ConnectionBuilder {
         protected void initChannel(Channel channel) throws Exception {
 
             SSLParameters sslParams = new SSLParameters();
-
-            SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().sslProvider(SslProvider.JDK);
+            SslContext sslContext;
             if (redisURI.isVerifyPeer()) {
+            	sslContext = SslContext.newClientContext(SslProvider.JDK);
                 sslParams.setEndpointIdentificationAlgorithm("HTTPS");
             } else {
-                sslContextBuilder.trustManager(InsecureTrustManagerFactory.INSTANCE);
+            	sslContext = SslContext.newClientContext(SslProvider.JDK, InsecureTrustManagerFactory.INSTANCE);
             }
-
-            SslContext sslContext = sslContextBuilder.build();
 
             SSLEngine sslEngine = sslContext.newEngine(channel.alloc(), redisURI.getHost(), redisURI.getPort());
             sslEngine.setSSLParameters(sslParams);

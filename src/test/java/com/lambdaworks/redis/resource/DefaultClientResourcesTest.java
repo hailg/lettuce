@@ -62,7 +62,7 @@ public class DefaultClientResourcesTest {
         EventExecutorGroup eventExecutors = sut.eventExecutorGroup();
         NioEventLoopGroup eventLoopGroup = sut.eventLoopGroupProvider().allocate(NioEventLoopGroup.class);
 
-        assertThat(eventExecutors.iterator()).hasSize(4);
+        assertThat(eventExecutors.children()).hasSize(4);
         assertThat(eventLoopGroup.executorCount()).isEqualTo(4);
         assertThat(sut.ioThreadPoolSize()).isEqualTo(4);
         assertThat(sut.commandLatencyCollector()).isNotNull();
@@ -104,7 +104,7 @@ public class DefaultClientResourcesTest {
         EventExecutorGroup eventExecutors = sut.eventExecutorGroup();
         NioEventLoopGroup eventLoopGroup = sut.eventLoopGroupProvider().allocate(NioEventLoopGroup.class);
 
-        assertThat(eventExecutors.iterator()).hasSize(3);
+        assertThat(eventExecutors.children()).hasSize(3);
         assertThat(eventLoopGroup.executorCount()).isEqualTo(3);
         assertThat(sut.ioThreadPoolSize()).isEqualTo(3);
 
